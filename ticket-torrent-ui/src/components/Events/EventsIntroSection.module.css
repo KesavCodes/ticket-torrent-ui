@@ -1,0 +1,30 @@
+.gradient {
+    background: linear-gradient(306deg, #f1554d, #7b83f0, #d36ae4, #0dace8);
+    background-size: 800% 800%;
+
+    -webkit-animation: AnimationName 10s ease infinite;
+    -moz-animation: AnimationName 10s ease infinite;
+    -o-animation: AnimationName 10s ease infinite;
+    animation: AnimationName 10s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 24%}
+    50%{background-position:100% 77%}
+    100%{background-position:0% 24%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 24%}
+    50%{background-position:100% 77%}
+    100%{background-position:0% 24%}
+}
+@-o-keyframes AnimationName {
+    0%{background-position:0% 24%}
+    50%{background-position:100% 77%}
+    100%{background-position:0% 24%}
+}
+@keyframes AnimationName {
+    0%{background-position:0% 24%}
+    50%{background-position:100% 77%}
+    100%{background-position:0% 24%}
+}
