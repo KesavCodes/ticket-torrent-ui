@@ -14,13 +14,13 @@ const Modal: React.FC<PropsWithChildren<{ onClose: () => void }>> = ({
     const modal = dialog.current;
     modal?.showModal();
 
-    return () => {
-      modal?.close(); // needed to avoid error being thrown
-    };
+    // return () => {
+    //   modal?.close(); // needed to avoid error being thrown
+    // };
   }, []);
 
   return createPortal(
-    <dialog className="modal" ref={dialog} onClose={onClose}>
+    <dialog className="modal left-[7%] md:left-[16.5%] xl:left-[25%] w-[86%] md:w-2/3 xl:w-1/2 p-2 md:p-4 xl:p-8" ref={dialog} onClose={onClose}>
       {children}
     </dialog>,
     document.getElementById("modal")!

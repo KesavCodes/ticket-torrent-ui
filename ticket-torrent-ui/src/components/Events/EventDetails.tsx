@@ -71,9 +71,17 @@ export default function EventDetails() {
       day: "numeric",
     });
 
+    const titleAndDescription = (isHorizontal: boolean) => (
+      <div className={isHorizontal ? "hidden lg:block" : "flex lg:hidden p-4 mt-2 flex-col gap-2"}>
+        <h2 className={"text-2xl lg:text-2xl xl:text-4xl font-bold "}>
+          {data.name}
+        </h2>
+        <p className="my-2">{data.description}</p>
+      </div>
+    );
     content = (
-      <article className=" md:w-4/5 h-[800px] flex bg-gray-500 bg-opacity-20 backdrop-blur-lg drop-shadow-lg rounded-md text-white text-xl">
-        <section className="flex flex-col w-3/5">
+      <article className=" md:w-4/5 flex flex-col lg:flex-row  bg-gray-500 bg-opacity-20 backdrop-blur-lg drop-shadow-lg rounded-md text-white xl:text-xl">
+        <section className="flex flex-col lg:w-3/5">
           <div className="relative">
             <img
               src={data.cover}
@@ -95,8 +103,22 @@ export default function EventDetails() {
                 className="w-full h-4"
               />
             </div>
+            <div className="absolute bottom-2 left-2">
+              <Link to={`edit`}>
+                <button className="bg-blue-700 text-white text-sm font-bold py-1 px-2 rounded-md">
+                  Edit
+                </button>
+              </Link>
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                className="ml-2 bg-red-700  text-white text-sm font-bold py-1 px-2 rounded-md"
+              >
+                Delete
+              </button>
+            </div>
           </div>
-          <div className="flex flex-col lg:flex-row justify-between mt-4 p-4">
+          {titleAndDescription(false)}
+          <div className="flex flex-col lg:flex-row justify-between mt-2 md:mt-4 px-4 md:py-4">
             <div className="flex flex-col gap-4 ">
               <div className="flex gap-3 items-center">
                 <img
@@ -116,7 +138,7 @@ export default function EventDetails() {
               </div>
             </div>
             <div className="max-lg:mt-4 flex flex-col lg:items-end gap-4 lg:justify-between">
-              <span className="bg-blue-700 px-2 py-1 rounded-md">
+              <span className="lg:bg-blue-700 px-2 py-1 rounded-md outline outline-2 outline-blue-400 lg:outline-none">
                 {data.category}
               </span>
               <div className="flex gap-2">
@@ -125,7 +147,7 @@ export default function EventDetails() {
                     return (
                       <span
                         key={index}
-                        className="text-sm bg-blue-700 rounded-2xl px-2 py-1"
+                        className="text-sm lg:bg-blue-700 rounded-2xl px-2 py-1 outline outline-2 outline-blue-400 lg:outline-none"
                       >
                         {item}
                       </span>
@@ -135,14 +157,13 @@ export default function EventDetails() {
             </div>
           </div>
         </section>
-        <section className="w-2/5 p-8 flex flex-col gap-6">
-          <h2 className="text-4xl font-bold">{data.name}</h2>
-          <p className="my-2">{data.description}</p>
-          <div className="flex justify-between items-center">
-            <span className="text-3xl">Tickets</span>
+        <section className="lg:w-2/5 p-4 md:p-8 flex flex-col gap-4 md:gap-6">
+          {titleAndDescription(true)}
+          <div className="flex justify-between items-center mt-4 lg:mt-0">
+            <span className="text-xl lg:text-2xl xl:text-3xl ">Tickets</span>
             <Link
-              to={`events/`}
-              className="text-center bg-blue-500 text-white w-1/2 px-2 py-1 rounded-md hover:bg-blue-600"
+              to={`/events/new`}
+              className="text-center bg-blue-800 text-white w-1/2 px-2 py-1 rounded-md"
             >
               Sell Tickets
             </Link>
@@ -155,22 +176,22 @@ export default function EventDetails() {
     <>
       {showDeleteModal && (
         <Modal onClose={() => setShowDeleteModal(false)}>
-          <h2>Are you sure?</h2>
-          <p>
+          <h2 className="text-3xl text-center font-bold text-blue-700">Are you sure?</h2>
+          <p className="text-lg mt-4">
             Do you really want to delete this event? This action cannot be
             undone.
           </p>
-          <div className="form-actions">
+          <div className="flex justify-between mt-4">
             <button
               onClick={() => setShowDeleteModal(false)}
-              className="button-text"
+              className="text-blue-700 text-xl"
               disabled={isErrorForDelete}
             >
               Cancel
             </button>
             <button
               onClick={() => mutate({ id: id ?? "" })}
-              className="button"
+              className="text-red-700 text-xl"
               disabled={isErrorForDelete}
             >
               {isPendingForDelete ? "Deleting..." : "Delete"}

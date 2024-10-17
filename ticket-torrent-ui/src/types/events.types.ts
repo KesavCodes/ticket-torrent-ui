@@ -3,7 +3,7 @@ export interface Event {
   name: string;
   description: string;
   cover: string;
-  date: Date;
+  date: string | Date;
   city: {
     id: string;
     name: string;

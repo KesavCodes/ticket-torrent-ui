@@ -27,16 +27,15 @@ export default function EventItem({ event }: { event: Event }) {
 
   const detailsItemClass = "flex gap-2 items-center font-medium text-sm";
 
-  console.log(event, "--event");
   return (
     <article
-      className={`rounded-md w-[21rem] sm:w-[20rem] md:w-[21rem] lg:w-[24rem] xl:w-[27rem] bg-white-box ${styles["bg-white-box"]} text-white ${styles["b-game-card"]}`}
+      className={`rounded-md mr-4 w-[21rem] sm:w-[20rem] md:w-[21rem] lg:w-[24rem] xl:w-[27rem] bg-white-box ${styles["bg-white-box"]} text-white ${styles["b-game-card"]}`}
     >
       <div className="relative p-4">
         <img
           src={event.cover}
           alt={event.name}
-          className="p-2 w-full lg:h-64 rounded-2xl"
+          className="p-2 w-full aspect-video rounded-2xl"
         />
         <div className="absolute top-8 aspect-square left-8 bg-white px-2 py-0.5 rounded-md flex justify-center items-stretch flex-col">
           <span className="text-center text-2xl font-extrabold text-black">

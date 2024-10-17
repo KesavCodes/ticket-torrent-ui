@@ -48,7 +48,7 @@ export default function EditEvent() {
       return { previousEvent };
     },
     onError: (error, data, context) => {
-      queryClient.setQueryData(["events", id], context.previousEvent);
+      queryClient.setQueryData(["events", id], context?.previousEvent);
     },
     //This will be called regardless of the result(success or failure). Revalidate the query just to make sure we have the correct
     // data from the database.
@@ -65,6 +65,8 @@ export default function EditEvent() {
   function handleClose() {
     navigate("../");
   }
+
+  console.log("hello")
   let content;
   if (isPending)
     content = (
@@ -86,15 +88,16 @@ export default function EditEvent() {
         </div>
       </div>
     );
+  console.log(data, '---data')
   if (data)
     content = (
       <EventForm inputData={data} onSubmit={handleSubmit}>
-        <Link to="../" className="button-text">
+        <Link to={`/events/${id}`} className="text-red-700 text-xl">
           Cancel
         </Link>
         <button
           type="submit"
-          className="button"
+          className="text-green-800 text-xl"
           disabled={state === "submitting"}
         >
           {state === "submitting" ? "Updating..." : "Update"}

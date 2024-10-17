@@ -12,16 +12,17 @@ export default function NewEvent() {
     mutationFn: createNewEvent,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
-      navigate("/events");
+      navigate("/");
     },
   });
-  function handleSubmit(formData) {
+  function handleSubmit(formData:FormData) {
     mutate({ event: formData });
   }
 
   return (
-    <Modal onClose={() => navigate("../")}>
-      <EventForm onSubmit={handleSubmit}>
+    <Modal onClose={() => navigate("/")}>
+      <h2 className="text-center text-2xl">Add new Event</h2>
+      <EventForm onSubmit={handleSubmit} inputData={{}}>
         {isPending && <p>Submitting...</p>}
         {!isPending && (
           <>

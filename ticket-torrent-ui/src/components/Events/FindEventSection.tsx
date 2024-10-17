@@ -6,6 +6,8 @@ import ErrorBlock from "../UI/ErrorBlock.tsx";
 import EventItem from "./EventItem";
 import { Event } from "../../types/events.types.ts";
 
+import CustomSlider from "../UI/Slider.tsx";
+
 export default function FindEventSection() {
   const searchElement = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState<string>();
@@ -20,7 +22,11 @@ export default function FindEventSection() {
     setSearchTerm(searchElement.current?.value);
   }
 
-  let content = <p className="text-sm mb-4 text-white">Please enter a search term to find events.</p>;
+  let content = (
+    <p className="text-sm mb-4 text-white">
+      Please enter a search term to find events.
+    </p>
+  );
   if (isLoading) content = <LoadingIndicator />;
   if (isError)
     content = (
@@ -32,15 +38,16 @@ export default function FindEventSection() {
       />
     );
   if (data) {
-    console.log(data)
     content = (
-      <ul className="flex gap-6">
-        {data.map((event: Event) => (
-          <li key={event.id}>
-            <EventItem event={event} />
-          </li>
-        ))}
-      </ul>
+      <div className={`slider-container`}>
+        <CustomSlider>
+          {data.map((event: Event) => (
+            <div key={event.id}>
+              <EventItem event={event} />
+            </div>
+          ))}
+        </CustomSlider>
+      </div>
     );
   }
   return (

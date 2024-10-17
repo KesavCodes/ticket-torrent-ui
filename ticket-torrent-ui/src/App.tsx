@@ -25,12 +25,15 @@ const router = createBrowserRouter([
       {
         path: ":id",
         element: <EventDetails />,
-        children: [
-          {
-            path: ":id/edit",
-            element: <EditEvent />,
-          },
-        ],
+        children: [],
+      },
+      {
+        path: ":id/edit",
+        element: <EditEvent />,
+      },
+      {
+        path: ":id/ticket/new",
+        element: <EditEvent />, //NEED TO CREATE NEW ADD TICKET COMPONENT
       },
     ],
   },
