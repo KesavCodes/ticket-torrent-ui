@@ -1,5 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { Event } from "../types/events.types";
+import { TicketRequest } from "../types/tickets.types";
 
 export const queryClient = new QueryClient();
 
@@ -22,7 +23,7 @@ export async function fetchEvents({
     url += "/search?max=" + max;
   }
 
-  const response = await fetch(url, { signal: signal });
+  const response = await fetch(url, { credentials: "include", signal: signal });
 
   if (!response.ok) {
     const info = await response.json();
@@ -44,7 +45,9 @@ export async function fetchEventById({
 }) {
   const url = `http://localhost:8080/events/id/${id}`;
 
-  const response = await fetch(url, { signal: signal });
+  const response = await fetch(url, {
+    signal,
+  });
 
   if (!response.ok) {
     const info = await response.json();
@@ -108,3 +111,67 @@ export async function deleteEvent({ id }: { id: string }) {
 
   return null;
 }
+
+export async function createNewTicket(ticketData: TicketRequest) {
+  const response = await fetch(`http://localhost:8080/ticket`, {
+    method: "POST",
+    credentials: "include",
+    body: JSON.stringify(ticketData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    const info = await response.json();
+    const error = new Error(info?.message);
+    throw error;
+  }
+
+  const { data } = await response.json();
+
+  return data;
+}
+
+export const AuthenticateUserLocal = async (userInput: {
+  username?: string;
+  password: string;
+  email: string;
+  mode: "login" | "register";
+}) => {
+  let userData;
+
+  if (userInput.mode === "login") {
+    userData = {
+      username: userInput.email,
+      password: userInput.password,
+    };
+  } else {
+    userData = {
+      username: userInput.username,
+      password: userInput.password,
+      email: userInput.email,
+    };
+  }
+
+  const response = await fetch(
+    `http://localhost:8080/auth/local/${
+      userInput.mode === "login" ? "login" : "register"
+    }`,
+    {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify(userData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  if (!response.ok) {
+    const info = await response.json();
+    const error = new Error(info?.message);
+    throw error;
+  }
+  const data = await response.json();
+  return data;
+};

@@ -8,9 +8,11 @@ import calenderLogo from "../../assets/event-card/calender.svg";
 import locationLogo from "../../assets/event-card/location.svg";
 import moneyLogo from "../../assets/event-card/money.svg";
 import sparkleLogo from "../../assets/event-card/shine.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function EventItem({ event }: { event: Event }) {
+
+  const navigate = useNavigate();
   const formattedDateForBanner = new Date(event.date)
     .toLocaleDateString("en-US", {
       day: "2-digit",
@@ -35,7 +37,8 @@ export default function EventItem({ event }: { event: Event }) {
         <img
           src={event.cover}
           alt={event.name}
-          className="p-2 w-full aspect-video rounded-2xl"
+          className="p-2 w-full aspect-video rounded-2xl cursor-pointer"
+          onClick={()=>navigate(`events/${event.id}`)}
         />
         <div className="absolute top-8 aspect-square left-8 bg-white px-2 py-0.5 rounded-md flex justify-center items-stretch flex-col">
           <span className="text-center text-2xl font-extrabold text-black">

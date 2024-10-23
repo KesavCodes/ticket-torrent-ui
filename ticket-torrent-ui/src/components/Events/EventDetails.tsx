@@ -13,6 +13,7 @@ import locationLogo from "../../assets/event-card/location.svg";
 import sparkleLogo from "../../assets/event-card/shine.svg";
 import calenderLogo from "../../assets/event-card/calender.svg";
 import { Link } from "react-router-dom";
+import AvailableTickets from "../Tickets/AvailableTickets.tsx";
 
 export default function EventDetails() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -57,7 +58,7 @@ export default function EventDetails() {
     );
 
   if (data) {
-    console.log(data.date);
+    console.log(data, '--- data');
     const formattedDateForBanner = new Date(data.date)
       .toLocaleDateString("en-US", {
         day: "2-digit",
@@ -162,11 +163,14 @@ export default function EventDetails() {
           <div className="flex justify-between items-center mt-4 lg:mt-0">
             <span className="text-xl lg:text-2xl xl:text-3xl ">Tickets</span>
             <Link
-              to={`/events/new`}
+              to={`/events/${id}/ticket/new`}
               className="text-center bg-blue-800 text-white w-1/2 px-2 py-1 rounded-md"
             >
               Sell Tickets
             </Link>
+          </div>
+          <div>
+            <AvailableTickets tickets={data.tickets}/>
           </div>
         </section>
       </article>
