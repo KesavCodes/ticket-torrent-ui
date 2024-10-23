@@ -8,11 +8,17 @@ import EditEvent from "./components/Events/EditEvent.tsx";
 
 import { queryClient } from "./utils/https.ts";
 import Home from "./components/Home.tsx";
+import NewTicket from "./components/Tickets/NewTicket.tsx";
+import Auth from "./components/Auth/Auth.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/auth",
+    element: <Auth />,
   },
   {
     path: "events",
@@ -25,7 +31,6 @@ const router = createBrowserRouter([
       {
         path: ":id",
         element: <EventDetails />,
-        children: [],
       },
       {
         path: ":id/edit",
@@ -33,7 +38,7 @@ const router = createBrowserRouter([
       },
       {
         path: ":id/ticket/new",
-        element: <EditEvent />, //NEED TO CREATE NEW ADD TICKET COMPONENT
+        element: <NewTicket />, //NEED TO CREATE NEW ADD TICKET COMPONENT
       },
     ],
   },

@@ -13,6 +13,9 @@ export default function Events() {
         <Link to="/events/new" className="button">
           New Event
         </Link>
+        <Link to="/" className="nav-item">
+          View all Events
+        </Link>
       </Header>
       <main>
         <EventsIntroSection />
