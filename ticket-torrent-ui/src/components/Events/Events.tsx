@@ -4,7 +4,10 @@ import Header from "../Header.js";
 export default function Events() {
   return (
     <>
-      <Header>
+ <Header>
+        <Link to="/events/new" className="button">
+          New Event
+        </Link>
         <Link to="/" className="nav-item">
           View all Events
         </Link>

@@ -1,4 +1,4 @@
-import { Ticket } from "../../types/tickets.types";
+import { TicketRequest } from "../../types/tickets.types";
 
 export default function TicketForm({
   eventId,
@@ -6,7 +6,7 @@ export default function TicketForm({
   children,
 }: {
   eventId: string;
-  onSubmit: (data: Ticket) => void;
+  onSubmit: (data: TicketRequest) => void;
   children: React.ReactNode;
 }) {
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {

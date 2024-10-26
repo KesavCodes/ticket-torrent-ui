@@ -66,7 +66,6 @@ export default function EditEvent() {
     navigate("../");
   }
 
-  console.log("hello")
   let content;
   if (isPending)
     content = (
@@ -88,7 +87,6 @@ export default function EditEvent() {
         </div>
       </div>
     );
-  console.log(data, '---data')
   if (data)
     content = (
       <EventForm inputData={data} onSubmit={handleSubmit}>

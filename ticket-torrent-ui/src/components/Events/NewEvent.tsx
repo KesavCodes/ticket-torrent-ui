@@ -5,31 +5,34 @@ import EventForm from "./EventForm.js";
 import { useMutation } from "@tanstack/react-query";
 import { createNewEvent, queryClient } from "../../utils/https.ts";
 import ErrorBlock from "../UI/ErrorBlock.js";
+import {EventRequest } from "../../types/events.types.ts";
 
 export default function NewEvent() {
   const navigate = useNavigate();
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createNewEvent,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
-      navigate("/");
+      const newEventId = data.id
+      console.log(newEventId, 'new event id')
+      navigate(`/events/${newEventId}`);
     },
   });
-  function handleSubmit(formData:FormData) {
-    mutate({ event: formData });
+  function handleSubmit(eventData:EventRequest) {
+    mutate(eventData);
   }
+
 
   return (
     <Modal onClose={() => navigate("/")}>
-      <h2 className="text-center text-2xl">Add new Event</h2>
-      <EventForm onSubmit={handleSubmit} inputData={{}}>
+      <EventForm onSubmit={handleSubmit}>
         {isPending && <p>Submitting...</p>}
         {!isPending && (
           <>
-            <Link to="../" className="button-text">
+            <Link to="/" className="text-red-700 text-xl">
               Cancel
             </Link>
-            <button type="submit" className="button">
+            <button type="submit" className="text-green-800 text-xl">
               Create
             </button>
           </>
@@ -39,7 +42,7 @@ export default function NewEvent() {
         <ErrorBlock
           title="An error occurred"
           message={
-            error.info?.message ||
+            error.message ||
             "Failed to create event. Please check your inputs and try again later."
           }
         />

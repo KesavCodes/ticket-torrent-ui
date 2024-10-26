@@ -1,11 +1,11 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Modal from "../UI/Modal.js";
 import { useMutation } from "@tanstack/react-query";
 import { createNewTicket, queryClient } from "../../utils/https.ts";
 import ErrorBlock from "../UI/ErrorBlock.js";
 import TicketForm from "./TicketForm.js";
-import { Ticket } from "../../types/tickets.types.ts";
+import { TicketRequest } from "../../types/tickets.types.ts";
 
 export default function NewTicket() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export default function NewTicket() {
       navigate(`/events/${id}`);
     },
   });
-  function handleSubmit(formData: Ticket) {
+  function handleSubmit(formData: TicketRequest) {
     mutate(formData);
   }
   console.log(error?.message, '---Errors')
@@ -29,7 +29,7 @@ export default function NewTicket() {
         {isPending && <p>Submitting...</p>}
         {!isPending && (
           <>
-            <button onClick={()=>navigate(-1)} className="text-red-700 text-xl">
+            <button type="button" onClick={()=>navigate(-1)} className="text-red-700 text-xl">
               Cancel
             </button>
             <button type="submit" className="text-green-800 text-xl">

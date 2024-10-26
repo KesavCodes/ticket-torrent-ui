@@ -13,7 +13,7 @@ const Header: React.FC<PropsWithChildren> = ({ children }) => {
             <h1 className="text-2xl text-white ">React Events</h1>
           </Link>
         </div>
-        <nav className="flex gap-4">{children}</nav>
+        <nav className="flex gap-8">{children}</nav>
       </header>
     </>
   );

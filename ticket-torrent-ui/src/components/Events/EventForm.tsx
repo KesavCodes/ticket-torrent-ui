@@ -1,21 +1,37 @@
-import { Event } from "../../types/events.types";
+import { useQuery } from "@tanstack/react-query";
+import { Event, EventRequest } from "../../types/events.types";
+import { fetchAllCities } from "../../utils/https";
 
 export default function EventForm({
   inputData,
   onSubmit,
   children,
 }: {
-  inputData: null | Event;
-  onSubmit: (data: FormData) => void;
+  inputData?: Event;
+  onSubmit: (data: EventRequest) => void;
   children: React.ReactNode;
 }) {
-  function handleSubmit(event) {
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["images"],
+    queryFn: ({ signal }) => fetchAllCities({ signal }),
+  });
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData);
+    const formData = new FormData(event.currentTarget);
+    const data = Object.fromEntries(formData) as unknown as EventRequest;
+    data.cover =
+      "https://static.vecteezy.com/system/resources/previews/016/916/479/original/placeholder-icon-design-free-vector.jpg";
 
-    onSubmit({ ...data, image: "" });
+    const dateWithTime = new Date(
+      `${data.date}:${data.dateTime}`
+    ).toISOString();
+    data.date = dateWithTime;
+    data.dateTime = dateWithTime;
+    data.tags = (data.tags as unknown as string).split(",")
+
+    onSubmit(data);
   }
 
   let defaultDate;
@@ -32,13 +48,13 @@ export default function EventForm({
     <form onSubmit={handleSubmit} className="flex flex-col gap-2">
       <h2 className="text-3xl text-center text-blue-700">Add / Edit Event</h2>
       <p className={inputControlClass}>
-        <label htmlFor="title" className="text-xl">
+        <label htmlFor="name" className="text-xl">
           Title
         </label>
         <input
           type="text"
-          id="title"
-          name="title"
+          id="name"
+          name="name"
           defaultValue={inputData?.name ?? ""}
           className={inputClass}
         />
@@ -70,13 +86,13 @@ export default function EventForm({
           />
         </p>
         <p className={inputControlClass}>
-          <label htmlFor="time" className="text-xl">
+          <label htmlFor="dateTime" className="text-xl">
             Time
           </label>
           <input
             type="time"
-            id="time"
-            name="time"
+            id="dateTime"
+            name="dateTime"
             className={`${inputClass} md:w-[200px]`}
             defaultValue={defaultTime ?? ""}
           />
@@ -98,25 +114,39 @@ export default function EventForm({
 
       <div className="md:flex justify-start md:gap-8">
         <p className={inputControlClass}>
-          <label htmlFor="location" className="text-xl">
-            City
+          <label htmlFor="cityId" className="text-xl">
+            City {isPending ? " (loading cities..)" : ""}
           </label>
-          <input
+          <select
+            name="cityId"
+            id="cityId"
+            disabled={isPending}
+            className={`${inputClass} md:w-[200px] py-1.5`}
+            defaultValue={inputData?.cityId}
+          >
+            {data?.map((city: { id: string; name: string }) => (
+              <option key={city.id} value={city.id}>
+                {city.name}
+              </option>
+            ))}
+          </select>
+          {isError && <p>{error.message}</p>}
+          {/* <input
             type="text"
             id="location"
             name="location"
             className={`${inputClass} md:w-[200px]`}
             defaultValue={inputData?.city?.name ?? ""}
-          />
+          /> */}
         </p>
         <p className={inputControlClass}>
-          <label htmlFor="tags" className="text-xl">
+          <label htmlFor="hostedBy" className="text-xl">
             Hosted by
           </label>
           <input
             type="text"
-            id="hosted"
-            name="hosted"
+            id="hostedBy"
+            name="hostedBy"
             className={`${inputClass} md:w-[200px]`}
             defaultValue={inputData?.hostedBy ?? ""}
           />
@@ -144,7 +174,7 @@ export default function EventForm({
             id="tags"
             name="tags"
             className={`${inputClass} md:w-[200px]`}
-            defaultValue={inputData?.tags.join(",") ?? ""}
+            defaultValue={inputData?.tags?.join(",") ?? ""}
           />
         </p>
       </div>
