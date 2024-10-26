@@ -1,5 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
-import { Event } from "../types/events.types";
+import { Event, EventRequest } from "../types/events.types";
 import { TicketRequest } from "../types/tickets.types";
 
 export const queryClient = new QueryClient();
@@ -27,7 +27,7 @@ export async function fetchEvents({
 
   if (!response.ok) {
     const info = await response.json();
-    const error = new Error(info);
+    const error = new Error(info?.message);
     throw error;
   }
 
@@ -60,9 +60,10 @@ export async function fetchEventById({
   return data;
 }
 
-export async function createNewEvent(eventData: Event) {
+export async function createNewEvent(eventData: EventRequest) {
   const response = await fetch(`http://localhost:8080/events`, {
     method: "POST",
+    credentials: "include",
     body: JSON.stringify(eventData),
     headers: {
       "Content-Type": "application/json",
@@ -71,13 +72,13 @@ export async function createNewEvent(eventData: Event) {
 
   if (!response.ok) {
     const info = await response.json();
-    const error = new Error(info);
+    const error = new Error(info?.message);
     throw error;
   }
 
-  const { event } = await response.json();
+  const { data } = await response.json();
 
-  return event;
+  return data;
 }
 
 export async function updateEvent({ id, event }: { id: string; event: Event }) {
@@ -175,3 +176,50 @@ export const AuthenticateUserLocal = async (userInput: {
   const data = await response.json();
   return data;
 };
+
+
+export async function fetchAllCities({
+  signal
+}: {
+  signal: AbortSignal;
+}) {
+  const url = `http://localhost:8080/city`;
+
+  const response = await fetch(url, {
+    signal,
+  });
+
+  if (!response.ok) {
+    const info = await response.json();
+    const error = new Error(info);
+    throw error;
+  }
+
+  const { data } = await response.json();
+
+  return data;
+}
+
+
+export async function fetchMyDetails({
+  signal
+}: {
+  signal: AbortSignal;
+}) {
+  const url = `http://localhost:8080/user/me`;
+
+  const response = await fetch(url, {
+    credentials: "include",
+    signal,
+  });
+
+  if (!response.ok) {
+    const info = await response.json();
+    const error = new Error(info?.message);
+    throw error;
+  }
+
+  const { data } = await response.json();
+
+  return data;
+}

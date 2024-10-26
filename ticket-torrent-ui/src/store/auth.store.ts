@@ -8,9 +8,10 @@ interface AuthStore {
 
 export const useAuthStore = create<AuthStore>((set) => {
   let userTt = localStorage.getItem("userTt");
+  console.log("userTt:" + userTt);
   if (userTt) userTt = JSON.parse(userTt);
   return {
-    user: "",
+    user: userTt,
     login: (id: string) => {
       if (!id) return;
       localStorage.setItem("userTt", JSON.stringify(id));

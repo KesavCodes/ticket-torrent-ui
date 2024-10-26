@@ -23,7 +23,7 @@ const Auth = () => {
       } else {
         console.log(data, '---> from form submit')
         login(data?.user);
-        navigate("/");
+        navigate(-1);
       }
     },
   });

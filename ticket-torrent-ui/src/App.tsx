@@ -10,6 +10,7 @@ import { queryClient } from "./utils/https.ts";
 import Home from "./components/Home.tsx";
 import NewTicket from "./components/Tickets/NewTicket.tsx";
 import Auth from "./components/Auth/Auth.tsx";
+import Profile from "./components/Profile/Profile.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/auth",
     element: <Auth />,
+  },
+  {
+    path: "/profile",
+    element: <Profile />,
   },
   {
     path: "events",
