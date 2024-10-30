@@ -4,15 +4,14 @@ const AvailableTickets = ({ tickets }: { tickets: TicketResponse[] }) => {
   if (!tickets || !tickets.length)
     return <p className="text-xl text-center mt-4 p-8 outline rounded-lg outline-1 outline-blue-500">No Tickets available for this event!</p>;
 
-  const allTickets = tickets.reduce((acc, curr) => {
-    acc[curr.category]
-      ? acc[curr.category].push(curr)
-      : (acc[curr.category] = [curr]);
+  const allTickets = tickets.reduce<Record<string, TicketResponse[]>>((acc, curr) => {
+    if(acc[curr.category]) acc[curr.category].push(curr)
+    else acc[curr.category] = [curr];
     return acc;
   }, {});
 
   return (
-    <div className="scroll-auto mt-4">
+    <div className="mt-4">
       {Object.entries(allTickets).map(([key, value]) => {
         return (
           <div

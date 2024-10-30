@@ -169,7 +169,7 @@ export default function EventDetails() {
               Sell Tickets
             </Link>
           </div>
-          <div>
+          <div className="overflow-auto h-[530px]">
             <AvailableTickets tickets={data.tickets}/>
           </div>
         </section>

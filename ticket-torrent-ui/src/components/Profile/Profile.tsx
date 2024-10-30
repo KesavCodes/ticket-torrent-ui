@@ -5,6 +5,7 @@ import LoadingIndicator from "../UI/LoadingIndicator.js";
 import editIcon from "../../assets/edit.svg";
 import { useNavigate } from "react-router-dom";
 import CardContainer from "../UI/CardContainer.tsx";
+import AvailableTickets from "../Tickets/AvailableTickets.tsx";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -79,8 +80,12 @@ export default function Profile() {
         </section>
         <section className="flex flex-col lg:flex-row gap-4 p-4">
           <CardContainer>
-            <h2 className="text-2xl font-bold">Tickets Sold</h2>
-            <p className="text-center text-sm mt-3">Posted no ticket yet</p>
+            <h2 className="text-2xl font-bold">Tickets Posted</h2>
+            {data.tickets.length ? (
+              <AvailableTickets tickets={data.tickets} />
+            ) : (
+              <p className="text-center text-sm mt-3">Posted no ticket yet</p>
+            )}
           </CardContainer>
           <CardContainer>
             <h2 className="text-2xl font-bold">Requests</h2>
