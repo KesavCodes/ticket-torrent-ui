@@ -2,17 +2,36 @@ import { Event } from "../../types/events.types";
 
 import styles from "./EventItem.module.css";
 
+import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { updateLikeStatus } from "../../utils/https";
+
 import filledHeartLogo from "../../assets/event-card/like/filledHeart.png";
 import emptyHeartLogo from "../../assets/event-card/like/emptyHeart.png";
 import calenderLogo from "../../assets/event-card/calender.svg";
 import locationLogo from "../../assets/event-card/location.svg";
 import moneyLogo from "../../assets/event-card/money.svg";
 import sparkleLogo from "../../assets/event-card/shine.svg";
-import { Link, useNavigate } from "react-router-dom";
 
 export default function EventItem({ event }: { event: Event }) {
-
   const navigate = useNavigate();
+
+  const [isLiked, setIsLiked] = useState<boolean>(event.favorite);
+
+  const { mutate } = useMutation({
+    mutationFn: () => updateLikeStatus({eventId: event.id}),
+    onMutate: () => {
+      setIsLiked((prevState) => !prevState)
+    },
+    onError: (error) => {
+      const errorObj:{message:string, code:number} = JSON.parse(error.message)
+      // revert the mutation
+      if(errorObj.code===400) navigate("/auth")
+      setIsLiked((prevState) => !prevState)
+    },
+  });
+
   const formattedDateForBanner = new Date(event.date)
     .toLocaleDateString("en-US", {
       day: "2-digit",
@@ -38,7 +57,7 @@ export default function EventItem({ event }: { event: Event }) {
           src={event.cover}
           alt={event.name}
           className="p-2 w-full aspect-video rounded-2xl cursor-pointer"
-          onClick={()=>navigate(`events/${event.id}`)}
+          onClick={() => navigate(`events/${event.id}`)}
         />
         <div className="absolute top-8 aspect-square left-8 bg-white px-2 py-0.5 rounded-md flex justify-center items-stretch flex-col">
           <span className="text-center text-2xl font-extrabold text-black">
@@ -50,9 +69,10 @@ export default function EventItem({ event }: { event: Event }) {
         </div>
         <div className="absolute top-8 right-8 bg-white p-2 flex justify-center items-stretch flex-col rounded-full ">
           <img
-            src={event.favorite ? filledHeartLogo : emptyHeartLogo}
+            src={isLiked ? filledHeartLogo : emptyHeartLogo}
             alt="favorite"
-            className="w-full h-4"
+            className="w-full h-4 hover:cursor-pointer"
+            onClick={()=>mutate()}
           />
         </div>
       </div>
@@ -86,11 +106,17 @@ export default function EventItem({ event }: { event: Event }) {
           </div>
         </main>
         <div className="flex gap-2 mt-4 mb-2">
-          <Link to={`events/${event.id}`} className="text-center bg-blue-500 text-white w-1/2 px-2 py-1 rounded-md hover:bg-blue-600">
-              Buy Tickets
+          <Link
+            to={`events/${event.id}`}
+            className="text-center bg-blue-500 text-white w-1/2 px-2 py-1 rounded-md hover:bg-blue-600"
+          >
+            Buy Tickets
           </Link>
-          <Link to={`events/${event.id}`} className="text-center bg-gray-200 w-1/2 px-2 py-1 rounded-md text-black hover:bg-gray-300">
-              View details
+          <Link
+            to={`events/${event.id}`}
+            className="text-center bg-gray-200 w-1/2 px-2 py-1 rounded-md text-black hover:bg-gray-300"
+          >
+            View details
           </Link>
         </div>
       </section>

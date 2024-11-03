@@ -3,7 +3,7 @@ import Modal from "./../UI/Modal";
 import { useNavigate } from "react-router-dom";
 
 import googleLogo from "../../assets/google.svg";
-import { AuthenticateUserLocal } from "../../utils/https";
+import { AuthenticateUserLocal, queryClient } from "../../utils/https";
 import { useMutation } from "@tanstack/react-query";
 import ErrorBlock from "../UI/ErrorBlock";
 import { useAuthStore } from "../../store/auth.store";
@@ -21,14 +21,12 @@ const Auth = () => {
       if (authMode === "signUp") {
         setAuthMode("logIn");
       } else {
-        console.log(data, '---> from form submit')
         login(data?.user);
+        queryClient.invalidateQueries({ queryKey: ["events", { max: 5 }] });
         navigate(-1);
       }
     },
   });
-
-  console.log(error);
 
   const labelClass = "text-xl";
   const inputClass = "outline-none p-2 rounded-md";

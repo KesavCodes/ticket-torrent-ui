@@ -1,22 +1,26 @@
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { deleteEvent, fetchEventById, queryClient } from "../../utils/https.ts";
-import LoadingIndicator from "../UI/LoadingIndicator.js";
-import ErrorBlock from "../UI/ErrorBlock.js";
+import {
+  deleteEvent,
+  fetchEventById,
+  queryClient,
+} from "../../../utils/https.ts";
+import LoadingIndicator from "../../UI/LoadingIndicator.js";
+import ErrorBlock from "../../UI/ErrorBlock.js";
 import { useState } from "react";
-import Modal from "../UI/Modal.js";
+import Modal from "../../UI/Modal.js";
 
-import filledHeartLogo from "../../assets/event-card/like/filledHeart.png";
-import emptyHeartLogo from "../../assets/event-card/like/emptyHeart.png";
-import locationLogo from "../../assets/event-card/location.svg";
-import sparkleLogo from "../../assets/event-card/shine.svg";
-import calenderLogo from "../../assets/event-card/calender.svg";
+import locationLogo from "../../../assets/event-card/location.svg";
+import sparkleLogo from "../../../assets/event-card/shine.svg";
+import calenderLogo from "../../../assets/event-card/calender.svg";
 import { Link } from "react-router-dom";
-import AvailableTickets from "../Tickets/AvailableTickets.tsx";
+import AvailableTickets from "../../Tickets/AvailableTickets.tsx";
+import EventLikeInteraction from "./EventLikeInteraction.tsx";
 
 export default function EventDetails() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isPending, isError, error } = useQuery({
@@ -58,7 +62,7 @@ export default function EventDetails() {
     );
 
   if (data) {
-    console.log(data, '--- data');
+    console.log(data);
     const formattedDateForBanner = new Date(data.date)
       .toLocaleDateString("en-US", {
         day: "2-digit",
@@ -73,7 +77,13 @@ export default function EventDetails() {
     });
 
     const titleAndDescription = (isHorizontal: boolean) => (
-      <div className={isHorizontal ? "hidden lg:block" : "flex lg:hidden p-4 mt-2 flex-col gap-2"}>
+      <div
+        className={
+          isHorizontal
+            ? "hidden lg:block"
+            : "flex lg:hidden p-4 mt-2 flex-col gap-2"
+        }
+      >
         <h2 className={"text-2xl lg:text-2xl xl:text-4xl font-bold "}>
           {data.name}
         </h2>
@@ -98,11 +108,7 @@ export default function EventDetails() {
               </span>
             </div>
             <div className="absolute top-6 right-8 bg-white p-2 flex justify-center items-stretch flex-col rounded-full ">
-              <img
-                src={data.favorite ? filledHeartLogo : emptyHeartLogo}
-                alt="favorite"
-                className="w-full h-4"
-              />
+              <EventLikeInteraction fav={data.favorite} id={data.id}/>
             </div>
             <div className="absolute bottom-2 left-2">
               <Link to={`edit`}>
@@ -170,7 +176,7 @@ export default function EventDetails() {
             </Link>
           </div>
           <div className="overflow-auto h-[530px]">
-            <AvailableTickets tickets={data.tickets}/>
+            <AvailableTickets tickets={data.tickets} />
           </div>
         </section>
       </article>
@@ -180,7 +186,9 @@ export default function EventDetails() {
     <>
       {showDeleteModal && (
         <Modal onClose={() => setShowDeleteModal(false)}>
-          <h2 className="text-3xl text-center font-bold text-blue-700">Are you sure?</h2>
+          <h2 className="text-3xl text-center font-bold text-blue-700">
+            Are you sure?
+          </h2>
           <p className="text-lg mt-4">
             Do you really want to delete this event? This action cannot be
             undone.

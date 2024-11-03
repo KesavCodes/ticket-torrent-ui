@@ -23,7 +23,7 @@ export async function fetchEvents({
     url += "/search?max=" + max;
   }
 
-  const response = await fetch(url, { credentials: "include", signal: signal });
+  const response = await fetch(url, { credentials: "include", signal });
 
   if (!response.ok) {
     const info = await response.json();
@@ -47,6 +47,7 @@ export async function fetchEventById({
 
   const response = await fetch(url, {
     signal,
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -177,12 +178,7 @@ export const AuthenticateUserLocal = async (userInput: {
   return data;
 };
 
-
-export async function fetchAllCities({
-  signal
-}: {
-  signal: AbortSignal;
-}) {
+export async function fetchAllCities({ signal }: { signal: AbortSignal }) {
   const url = `http://localhost:8080/city`;
 
   const response = await fetch(url, {
@@ -200,12 +196,7 @@ export async function fetchAllCities({
   return data;
 }
 
-
-export async function fetchMyDetails({
-  signal
-}: {
-  signal: AbortSignal;
-}) {
+export async function fetchMyDetails({ signal }: { signal: AbortSignal }) {
   const url = `http://localhost:8080/user/me`;
 
   const response = await fetch(url, {
@@ -216,6 +207,27 @@ export async function fetchMyDetails({
   if (!response.ok) {
     const info = await response.json();
     const error = new Error(info?.message);
+    throw error;
+  }
+
+  const { data } = await response.json();
+
+  return data;
+}
+
+export async function updateLikeStatus({ eventId }: { eventId: string }) {
+  const url = `http://localhost:8080/like/${eventId}`;
+
+  const response = await fetch(url, {
+    credentials: "include",
+    method: "PUT",
+  });
+
+  if (!response.ok) {
+    const info = await response.json();
+    const error = new Error(
+      JSON.stringify({ message: info?.message, code: response.status })
+    );
     throw error;
   }
 

@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 
 import Events from "./components/Events/Events.tsx";
-import EventDetails from "./components/Events/EventDetails.tsx";
+import EventDetails from "./components/Events/EventDetails/EventDetails.tsx";
 import NewEvent from "./components/Events/NewEvent.tsx";
 import EditEvent from "./components/Events/EditEvent.tsx";
 

@@ -6,12 +6,18 @@ import editIcon from "../../assets/edit.svg";
 import { useNavigate } from "react-router-dom";
 import CardContainer from "../UI/CardContainer.tsx";
 import AvailableTickets from "../Tickets/AvailableTickets.tsx";
+import { useAuthStore } from "../../store/auth.store.ts";
 
 export default function Profile() {
   const navigate = useNavigate();
+
+  const user = useAuthStore((state) => state.user);
+  if (!user) navigate("/auth");
+
   const { data, isPending, isError } = useQuery({
     queryKey: ["profile"],
     queryFn: ({ signal }) => fetchMyDetails({ signal }),
+    retry: 1,
   });
 
   if (isError) navigate("/auth");
@@ -23,6 +29,7 @@ export default function Profile() {
       </div>
     );
   if (data) {
+    console.log(data)
     const boxClass =
       "relative outline outline-1 outline-blue-500 px-3 py-4 rounded-md max-lg:w-full  w-[250px]";
     const labelClass = "absolute -top-2 text-sm bg-blue-500 rounded-lg px-2";
@@ -94,7 +101,7 @@ export default function Profile() {
         </section>
         <section className="flex flex-col lg:flex-row gap-4 p-4">
           <CardContainer>
-            <h2 className="text-2xl font-bold absolute">Liked Tickets</h2>
+            <h2 className="text-2xl font-bold">Liked Tickets</h2>
             <p className="text-center text-sm mt-3">No liked ticket found</p>
           </CardContainer>
           <CardContainer>
