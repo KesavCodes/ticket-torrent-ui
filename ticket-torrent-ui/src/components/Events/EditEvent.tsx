@@ -3,7 +3,6 @@ import {
   // redirect,
   useNavigate,
   useParams,
-  useSubmit,
   useNavigation,
 } from "react-router-dom";
 
@@ -13,12 +12,14 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { fetchEventById, queryClient, updateEvent } from "../../utils/https.ts";
 import LoadingIndicator from "../UI/LoadingIndicator.tsx";
 import ErrorBlock from "../UI/ErrorBlock.tsx";
+import { EventRequest } from "../../types/events.types.ts";
 
 export default function EditEvent() {
   const { id } = useParams();
   const navigate = useNavigate();
+  if(!id) navigate("../")
 
-  const submit = useSubmit();
+  // const submit = useSubmit();
 
   const { state } = useNavigation();
 
@@ -26,15 +27,15 @@ export default function EditEvent() {
   // by using this we will also have the automatic fetching functionality when moved to different tab.
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["events", id],
-    queryFn: ({ signal }) => fetchEventById({ signal, id }),
+    queryFn: ({ signal }) => fetchEventById({ signal, id:id! }),
     staleTime: 10000,
   });
 
   const {
     mutate,
-    isPending: isPendingForUpdate,
-    isError: isErrorForUpdate,
-    error: errorForUpdate,
+    // isPending: isPendingForUpdate,
+    // isError: isErrorForUpdate,
+    // error: errorForUpdate,
   } = useMutation({
     mutationFn: updateEvent,
     onMutate: async ({ event: newEvent }) => {
@@ -47,7 +48,7 @@ export default function EditEvent() {
       // Whatever returned will be sent to the onError function as 'context' argument.
       return { previousEvent };
     },
-    onError: (error, data, context) => {
+    onError: (_, __, context) => {
       queryClient.setQueryData(["events", id], context?.previousEvent);
     },
     //This will be called regardless of the result(success or failure). Revalidate the query just to make sure we have the correct
@@ -56,10 +57,10 @@ export default function EditEvent() {
       queryClient.invalidateQueries({ queryKey: ["events", id] });
     },
   });
-  function handleSubmit(formData:FormData) {
-    // mutate({ id, event: formData });
-    // navigate("../");
-    submit(formData, { method: "PUT" });
+  function handleSubmit(formData:EventRequest) {
+    mutate({ id:id!, event: formData });
+    navigate(-1);
+    // submit(formData, { method: "PUT" });
   }
 
   function handleClose() {
