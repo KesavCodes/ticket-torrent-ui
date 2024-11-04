@@ -2,13 +2,20 @@ import { TicketResponse } from "../../types/tickets.types";
 
 const AvailableTickets = ({ tickets }: { tickets: TicketResponse[] }) => {
   if (!tickets || !tickets.length)
-    return <p className="text-xl text-center mt-4 p-8 outline rounded-lg outline-1 outline-blue-500">No Tickets available for this event!</p>;
+    return (
+      <p className="text-xl text-center mt-4 mx-2 p-8 outline rounded-lg outline-1 outline-blue-500">
+        No Tickets available for this event!
+      </p>
+    );
 
-  const allTickets = tickets.reduce<Record<string, TicketResponse[]>>((acc, curr) => {
-    if(acc[curr.category]) acc[curr.category].push(curr)
-    else acc[curr.category] = [curr];
-    return acc;
-  }, {});
+  const allTickets = tickets.reduce<Record<string, TicketResponse[]>>(
+    (acc, curr) => {
+      if (acc[curr.category]) acc[curr.category].push(curr);
+      else acc[curr.category] = [curr];
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className="mt-4">
@@ -34,7 +41,9 @@ const AvailableTickets = ({ tickets }: { tickets: TicketResponse[] }) => {
                   </span>
                 </p>
               </div>
-              <p><span className="text-sm">Posted by</span> {value[0].userId}</p>
+              <p>
+                <span className="text-sm">Posted by</span> {value[0].userId}
+              </p>
             </div>
           </div>
         );

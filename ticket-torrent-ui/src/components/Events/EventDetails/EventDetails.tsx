@@ -108,7 +108,7 @@ export default function EventDetails() {
               </span>
             </div>
             <div className="absolute top-6 right-8 bg-white p-2 flex justify-center items-stretch flex-col rounded-full ">
-              <EventLikeInteraction fav={data.favorite} id={data.id}/>
+              <EventLikeInteraction fav={data.favorite} id={data.id} />
             </div>
             <div className="absolute bottom-2 left-2">
               <Link to={`edit`}>
@@ -148,7 +148,7 @@ export default function EventDetails() {
               <span className="lg:bg-blue-700 px-2 py-1 rounded-md outline outline-2 outline-blue-400 lg:outline-none">
                 {data.category}
               </span>
-              <div className="flex gap-2">
+              <div className="flex gap-2 flex-wrap">
                 {data.tags.length > 0 &&
                   data.tags.map((item: string, index: number) => {
                     return (
@@ -197,14 +197,14 @@ export default function EventDetails() {
             <button
               onClick={() => setShowDeleteModal(false)}
               className="text-blue-700 text-xl"
-              disabled={isErrorForDelete}
+              disabled={isPendingForDelete}
             >
               Cancel
             </button>
             <button
               onClick={() => mutate({ id: id ?? "" })}
               className="text-red-700 text-xl"
-              disabled={isErrorForDelete}
+              disabled={isPendingForDelete}
             >
               {isPendingForDelete ? "Deleting..." : "Delete"}
             </button>
