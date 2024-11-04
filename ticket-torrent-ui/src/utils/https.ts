@@ -1,5 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
-import { Event, EventRequest } from "../types/events.types";
+import { EventRequest } from "../types/events.types";
 import { TicketRequest } from "../types/tickets.types";
 
 export const queryClient = new QueryClient();
@@ -52,7 +52,7 @@ export async function fetchEventById({
 
   if (!response.ok) {
     const info = await response.json();
-    const error = new Error(info);
+    const error = new Error(info?.message);
     throw error;
   }
 
@@ -82,10 +82,11 @@ export async function createNewEvent(eventData: EventRequest) {
   return data;
 }
 
-export async function updateEvent({ id, event }: { id: string; event: Event }) {
+export async function updateEvent({ id, event }: { id: string; event: EventRequest }) {
+  console.log(event, '---event from updateEvent')
   const response = await fetch(`http://localhost:8080/events/${id}`, {
     method: "PUT",
-    body: JSON.stringify({ event }),
+    body: JSON.stringify(event),
     headers: {
       "Content-Type": "application/json",
     },
@@ -93,7 +94,7 @@ export async function updateEvent({ id, event }: { id: string; event: Event }) {
 
   if (!response.ok) {
     const info = await response.json();
-    const error = new Error(info);
+    const error = new Error(info?.message);
     throw error;
   }
 
@@ -103,11 +104,12 @@ export async function updateEvent({ id, event }: { id: string; event: Event }) {
 export async function deleteEvent({ id }: { id: string }) {
   const response = await fetch(`http://localhost:8080/events/${id}`, {
     method: "DELETE",
+    credentials: "include",
   });
 
   if (!response.ok) {
     const info = await response.json();
-    const error = new Error(info);
+    const error = new Error(info?.message);
     throw error;
   }
 
@@ -187,7 +189,7 @@ export async function fetchAllCities({ signal }: { signal: AbortSignal }) {
 
   if (!response.ok) {
     const info = await response.json();
-    const error = new Error(info);
+    const error = new Error(info?.message);
     throw error;
   }
 
