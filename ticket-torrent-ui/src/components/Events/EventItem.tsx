@@ -57,7 +57,7 @@ export default function EventItem({ event }: { event: Event }) {
           src={event.cover}
           alt={event.name}
           className="p-2 w-full aspect-video rounded-2xl cursor-pointer"
-          onClick={() => navigate(`events/${event.id}`)}
+          onClick={() => navigate(`/events/${event.id}`)}
         />
         <div className="absolute top-8 aspect-square left-8 bg-white px-2 py-0.5 rounded-md flex justify-center items-stretch flex-col">
           <span className="text-center text-2xl font-extrabold text-black">
@@ -107,13 +107,13 @@ export default function EventItem({ event }: { event: Event }) {
         </main>
         <div className="flex gap-2 mt-4 mb-2">
           <Link
-            to={`events/${event.id}`}
+            to={`/events/${event.id}`}
             className="text-center bg-blue-500 text-white w-1/2 px-2 py-1 rounded-md hover:bg-blue-600"
           >
             Buy Tickets
           </Link>
           <Link
-            to={`events/${event.id}`}
+            to={`/events/${event.id}`}
             className="text-center bg-gray-200 w-1/2 px-2 py-1 rounded-md text-black hover:bg-gray-300"
           >
             View details

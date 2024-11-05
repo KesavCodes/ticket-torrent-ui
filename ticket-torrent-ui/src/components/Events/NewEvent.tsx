@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Modal from "../UI/Modal.js";
 import EventForm from "./EventForm.js";
@@ -29,9 +29,9 @@ export default function NewEvent() {
         {isPending && <p>Submitting...</p>}
         {!isPending && (
           <>
-            <Link to="/" className="text-red-700 text-xl">
+            <button type="button" className="text-red-700 text-xl" onClick={()=>navigate(-1)}>
               Cancel
-            </Link>
+            </button>
             <button type="submit" className="text-green-800 text-xl">
               Create
             </button>

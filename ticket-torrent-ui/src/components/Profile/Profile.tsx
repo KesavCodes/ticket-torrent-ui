@@ -29,7 +29,6 @@ export default function Profile() {
       </div>
     );
   if (data) {
-    console.log(data)
     const boxClass =
       "relative outline outline-1 outline-blue-500 px-3 py-4 rounded-md max-lg:w-full  w-[250px]";
     const labelClass = "absolute -top-2 text-sm bg-blue-500 rounded-lg px-2";
