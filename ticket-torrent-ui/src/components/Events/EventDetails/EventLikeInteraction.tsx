@@ -23,7 +23,7 @@ const EventLikeInteraction = ({ fav, id }: { fav: boolean; id: string }) => {
       setIsLiked((prevState) => !prevState);
     },
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["events", { max: 5 }] }),
+      queryClient.invalidateQueries({ queryKey: ["events"] }),
   });
   return (
     <img
