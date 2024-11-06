@@ -52,8 +52,7 @@ body {
 .lds-ring {
   display: inline-block;
   position: relative;
-  /* margin: 1rem 0; */
-  padding-bottom: 12px;
+  margin: 1rem 0;
 }
 
 .lds-ring div {
