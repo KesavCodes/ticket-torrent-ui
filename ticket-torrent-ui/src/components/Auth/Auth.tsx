@@ -22,7 +22,7 @@ const Auth = () => {
         setAuthMode("logIn");
       } else {
         login(data?.user);
-        queryClient.invalidateQueries({ queryKey: ["events", { max: 5 }] });
+        queryClient.invalidateQueries({ queryKey: ["events"] });
         navigate(-1);
       }
     },

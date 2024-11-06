@@ -82,8 +82,13 @@ export async function createNewEvent(eventData: EventRequest) {
   return data;
 }
 
-export async function updateEvent({ id, event }: { id: string; event: EventRequest }) {
-  console.log(event, '---event from updateEvent')
+export async function updateEvent({
+  id,
+  event,
+}: {
+  id: string;
+  event: EventRequest;
+}) {
   const response = await fetch(`http://localhost:8080/events/${id}`, {
     method: "PUT",
     body: JSON.stringify(event),
@@ -198,7 +203,7 @@ export async function fetchAllCities({ signal }: { signal: AbortSignal }) {
   return data;
 }
 
-export async function fetchMyDetails({ signal }: { signal: AbortSignal }) {
+export async function fetchMyDetails({ signal }: { signal?: AbortSignal }) {
   const url = `http://localhost:8080/user/me`;
 
   const response = await fetch(url, {
