@@ -1,6 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import { Event, EventRequest } from "../../types/events.types";
-import { fetchAllCities } from "../../utils/https";
+import Cities from "./Cities";
 
 export default function EventForm({
   inputData,
@@ -11,11 +10,6 @@ export default function EventForm({
   onSubmit: (data: EventRequest) => void;
   children: React.ReactNode;
 }) {
-  const { data, isPending, isError, error } = useQuery({
-    queryKey: ["images"],
-    queryFn: ({ signal }) => fetchAllCities({ signal }),
-  });
-
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
@@ -29,7 +23,7 @@ export default function EventForm({
     ).toISOString();
     data.date = dateWithTime;
     data.dateTime = dateWithTime;
-    data.tags = (data.tags as unknown as string).split(",")
+    data.tags = (data.tags as unknown as string).split(",");
 
     onSubmit(data);
   }
@@ -114,30 +108,11 @@ export default function EventForm({
 
       <div className="md:flex justify-start md:gap-8">
         <p className={inputControlClass}>
-          <label htmlFor="cityId" className="text-xl">
-            City {isPending ? " (loading cities..)" : ""}
-          </label>
-          <select
-            name="cityId"
-            id="cityId"
-            disabled={isPending}
-            className={`${inputClass} md:w-[200px] py-1.5`}
-            defaultValue={inputData?.cityId}
-          >
-            {data?.map((city: { id: string; name: string }) => (
-              <option key={city.id} value={city.id}>
-                {city.name}
-              </option>
-            ))}
-          </select>
-          {isError && <p>{error.message}</p>}
-          {/* <input
-            type="text"
-            id="location"
-            name="location"
-            className={`${inputClass} md:w-[200px]`}
-            defaultValue={inputData?.city?.name ?? ""}
-          /> */}
+          <Cities
+            inputClass={inputClass}
+            cityId={inputData?.cityId}
+            forSearch={false}
+          />
         </p>
         <p className={inputControlClass}>
           <label htmlFor="hostedBy" className="text-xl">

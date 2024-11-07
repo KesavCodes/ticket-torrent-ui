@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { FormEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { fetchEvents } from "../../utils/https.ts";
 import LoadingIndicator from "../UI/LoadingIndicator.tsx";
 import ErrorBlock from "../UI/ErrorBlock.tsx";
@@ -7,6 +7,7 @@ import EventItem from "./EventItem";
 import { Event } from "../../types/events.types.ts";
 
 import CustomSlider from "../UI/Slider.tsx";
+import Cities from "./Cities.tsx";
 
 export default function FindEventSection({
   path,
@@ -21,9 +22,23 @@ export default function FindEventSection({
   const [searchTerm, setSearchTerm] = useState<string | undefined>(
     initialSearchTerm
   );
+  const [cityId, setCityId] = useState<string | undefined>();
+
+  const onCityChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const cityValue = event.currentTarget.value;
+    setCityId(cityValue);
+  };
+
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["events", { search: searchTerm }],
-    queryFn: ({ signal }) => fetchEvents({ signal, search: searchTerm }),
+    queryKey: ["events", { search: searchTerm }, cityId],
+    queryFn: ({ signal }) =>
+      fetchEvents({
+        signal,
+        search: searchTerm,
+        ...(cityId && cityId !== "__all__"
+          ? { optionalQuery: { cityId } }
+          : {}),
+      }),
     enabled: searchTerm !== undefined,
   });
 
@@ -79,12 +94,19 @@ export default function FindEventSection({
           onSubmit={handleSubmit}
           className={"flex gap-6" + " " + formClassName}
         >
-          <input
-            type="search"
-            placeholder="Search events"
-            ref={searchElement}
-            className="w-64 p-2 rounded-md text-black"
-          />
+          <div className="flex gap-4">
+            <input
+              type="search"
+              placeholder="Search events"
+              ref={searchElement}
+              className="w-64 p-2 rounded-md text-black"
+            />
+            <Cities
+              inputClass="w-64 px-2 py-3  rounded-md text-black"
+              forSearch={true}
+              changeHandler={onCityChange}
+            />
+          </div>
           <button
             className={
               formClassName
