@@ -8,13 +8,19 @@ export async function fetchEvents({
   signal,
   search,
   max,
+  optionalQuery,
 }: {
   signal: AbortSignal;
   search?: string;
   max?: number;
+  optionalQuery?: object;
 }) {
   let url = "http://localhost:8080/events";
 
+  let optionalQueries: Array<[string, string]> = [];
+  if (optionalQuery) {
+    optionalQueries = Object.entries(optionalQuery);
+  }
   if (search && max) {
     url += "/search?name=" + search + "&max=" + max;
   } else if (search) {
@@ -23,6 +29,15 @@ export async function fetchEvents({
     url += "/search?max=" + max;
   }
 
+  if (optionalQueries.length) {
+    if (url.endsWith("events")) {
+      url += "/search?" + optionalQueries[0][0] + "=" + optionalQueries[0][1];
+      optionalQueries.shift();
+    }
+    optionalQueries.forEach((query) => {
+      url += "&" + query[0] + "=" + query[1];
+    });
+  }
   const response = await fetch(url, { credentials: "include", signal });
 
   if (!response.ok) {
