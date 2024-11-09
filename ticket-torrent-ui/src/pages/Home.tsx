@@ -7,7 +7,7 @@ export default function Events() {
     <>
       <EventsIntroSection />
       <NewEventsSection />
-      <FindEventSection path="Home" />
+      <FindEventSection path="Home" formClassName="flex flex-col md:flex-row gap-4"/>
     </>
   );
 }

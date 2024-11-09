@@ -67,11 +67,11 @@ export default function FindEventSection({
       path === "Home" ? (
         <div className={`slider-container`}>
           <CustomSlider>
-            {data.map((event: Event) => (
+            {data.length ? data.map((event: Event) => (
               <div key={event.id}>
                 <EventItem event={event} />
               </div>
-            ))}
+            )): <p>No Events for this selection</p>}
           </CustomSlider>
         </div>
       ) : (
@@ -88,34 +88,34 @@ export default function FindEventSection({
     <section className="mt-4 pt-0 md:px-12 overflow-hidden p-4">
       <header className="mb-4">
         <h2 className={"flex text-3xl mb-4 text-white" + " " + formClassName}>
-          Find Your Event
+          Event Filters
         </h2>
         <form
           onSubmit={handleSubmit}
-          className={"flex gap-6" + " " + formClassName}
+          className={formClassName}
         >
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-col md:flex-row">
             <input
               type="search"
               placeholder="Search events"
               ref={searchElement}
-              className="w-64 p-2 rounded-md text-black"
+              className="md:w-64 px-2 py-3 rounded-md text-black"
             />
             <Cities
-              inputClass="w-64 px-2 py-3  rounded-md text-black"
+              inputClass="md:w-64 px-2 py-3 rounded-md text-black"
               forSearch={true}
               changeHandler={onCityChange}
             />
           </div>
           <button
             className={
-              formClassName
+              path === "allEvents"
                 ? "text-gray-800 mt-4 flex justify-center gap-2 items-center mx-auto shadow-xl text-lg bg-gray-50 backdrop-blur-md lg:font-semibold isolation-auto border-gray-50 before:absolute before:w-full before:transition-all before:duration-300 before:hover:w-full before:-left-full before:hover:left-0 before:rounded-full before:bg-gray-800 hover:text-gray-50 before:-z-10 before:aspect-square before:hover:scale-150 before:hover:duration-700 relative z-[1] px-4 py-2 overflow-hidden border-2 rounded-full group"
-                : "text-white"
+                : "text-white rounded-md py-2 px-8 bg-blue-500 font-bold"
             }
           >
             Search
-            {formClassName && (
+            {path === "allEvents" && (
               <svg
                 className="w-8 h-8 justify-end group-hover:rotate-90 group-hover:bg-gray-50 text-gray-50 ease-linear duration-300 rounded-full border border-gray-700 group-hover:border-none p-2 rotate-45"
                 viewBox="0 0 16 19"

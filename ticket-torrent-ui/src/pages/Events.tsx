@@ -31,7 +31,7 @@ const Event = () => {
   }
 
   if (data) {
-    content = <FindEventSection path="allEvents" initialSearchTerm="" formClassName="justify-center items-center flex-col"/>;
+    content = <FindEventSection path="allEvents" initialSearchTerm="" formClassName="flex gap-4 justify-center items-center flex-col"/>;
   }
   return (
     <div className="text-white ">
