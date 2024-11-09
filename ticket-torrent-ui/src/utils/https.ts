@@ -237,6 +237,25 @@ export async function fetchMyDetails({ signal }: { signal?: AbortSignal }) {
   return data;
 }
 
+export async function fetchUserDetails({ id, signal }: { id: string, signal?: AbortSignal }) {
+  const url = `http://localhost:8080/user/${id}`;
+
+  const response = await fetch(url, {
+    credentials: "include",
+    signal,
+  });
+
+  if (!response.ok) {
+    const info = await response.json();
+    const error = new Error(info?.message);
+    throw error;
+  }
+
+  const { data } = await response.json();
+
+  return data;
+}
+
 export async function updateLikeStatus({ eventId }: { eventId: string }) {
   const url = `http://localhost:8080/like/${eventId}`;
 
