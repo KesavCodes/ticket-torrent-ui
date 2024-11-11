@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import CardContainer from "../UI/CardContainer.tsx";
 import AvailableTickets from "../Tickets/AvailableTickets.tsx";
 import { useAuthStore } from "../../store/auth.store.ts";
+import EventProfileCard from "../Events/EventProfileCard.tsx";
+import { EventShortDescription } from "../../types/events.types.ts";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -84,7 +86,7 @@ export default function Profile() {
             </p>
           </div>
         </section>
-        <section className="flex flex-col lg:flex-row gap-4 p-4">
+        <section className="flex flex-col 2xl:flex-row gap-4 p-4">
           <CardContainer>
             <h2 className="text-2xl font-bold">Tickets Posted</h2>
             {data.tickets.length ? (
@@ -98,13 +100,23 @@ export default function Profile() {
             <p className="text-center text-sm mt-3">No ticket request found</p>
           </CardContainer>
         </section>
-        <section className="flex flex-col lg:flex-row gap-4 p-4">
+        <section className="flex flex-col 2xl:flex-row gap-4 p-4">
           <CardContainer>
-            <h2 className="text-2xl font-bold">Liked Tickets</h2>
-            <p className="text-center text-sm mt-3">No liked ticket found</p>
+            <h2 className="text-2xl font-bold">Liked Events</h2>
+            {data.likes.length ? (
+              <div className="flex flex-col gap-4 mt-6">
+                {data.likes.map(
+                  (item: { id: string; event: EventShortDescription }) => {
+                    return <EventProfileCard event={item.event} key={item.id}/>;
+                  }
+                )}
+              </div>
+            ) : (
+              <p className="text-center text-sm mt-3">Posted no ticket yet</p>
+            )}
           </CardContainer>
           <CardContainer>
-            <h2 className="text-2xl font-bold">Saved Tickets</h2>
+            <h2 className="text-2xl font-bold">Saved Events</h2>
             <p className="text-center text-sm mt-3">No saved ticket found</p>
           </CardContainer>
         </section>

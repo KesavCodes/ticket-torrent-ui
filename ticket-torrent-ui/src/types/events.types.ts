@@ -30,3 +30,16 @@ export interface EventRequest {
   hostedBy: string;
   userId: string;
 }
+
+export interface EventShortDescription {
+  id: string;
+  name: string;
+  description: string;
+  cover: string;
+  date: Date | string;
+  address: string;
+  category: string;
+  city: {
+    name: string;
+  };
+}
