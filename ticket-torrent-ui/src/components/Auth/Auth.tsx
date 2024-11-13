@@ -3,7 +3,11 @@ import Modal from "./../UI/Modal";
 import { useNavigate } from "react-router-dom";
 
 import googleLogo from "../../assets/google.svg";
-import { AuthenticateUserLocal, queryClient } from "../../utils/https";
+import {
+  authenticateUserLocal,
+  authenticateUserOauth,
+  queryClient,
+} from "../../utils/https";
 import { useMutation } from "@tanstack/react-query";
 import ErrorBlock from "../UI/ErrorBlock";
 import { useAuthStore } from "../../store/auth.store";
@@ -16,7 +20,7 @@ const Auth = () => {
   const login = useAuthStore((state) => state.login);
 
   const { mutate, isPending, isError, error } = useMutation({
-    mutationFn: AuthenticateUserLocal,
+    mutationFn: authenticateUserLocal,
     onSuccess: (data) => {
       if (authMode === "signUp") {
         setAuthMode("logIn");
@@ -25,6 +29,20 @@ const Auth = () => {
         queryClient.invalidateQueries({ queryKey: ["events"] });
         navigate(-1);
       }
+    },
+  });
+
+  const {
+    mutate: oAuthMutate,
+    isPending: oAuthIsPending,
+    isError: oAuthIsError,
+    error: oAuthError,
+  } = useMutation({
+    mutationFn: authenticateUserOauth,
+    onSuccess: (data) => {
+      login(data?.user);
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      navigate(-1);
     },
   });
 
@@ -130,10 +148,18 @@ const Auth = () => {
         <button
           type="button"
           className="flex gap-2 text-xl justify-center items-center w-1/5 self-center bg-black text-white px-4 py-1 rounded-md"
+          onClick={() => oAuthMutate({ provider: "google" })}
+          disabled={oAuthIsPending}
         >
           <img src={googleLogo} alt="google logo" className="w-6" />
           Google
         </button>
+        {oAuthIsError && (
+          <ErrorBlock
+            title="Failed to authenticate"
+            message={oAuthError.message}
+          />
+        )}
       </section>
     </Modal>
   );

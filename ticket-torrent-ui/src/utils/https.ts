@@ -157,7 +157,25 @@ export async function createNewTicket(ticketData: TicketRequest) {
   return data;
 }
 
-export const AuthenticateUserLocal = async (userInput: {
+export const authenticateUserOauth = async ({
+  provider,
+}: {
+  provider: string;
+}) => {
+  const response = await fetch(`http://localhost:8080/auth/${provider}/login`, {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    const info = await response.json();
+    const error = new Error(info?.message);
+    throw error;
+  }
+  const data = await response.json();
+  return data;
+};
+
+export const authenticateUserLocal = async (userInput: {
   username?: string;
   password: string;
   email: string;
@@ -237,7 +255,13 @@ export async function fetchMyDetails({ signal }: { signal?: AbortSignal }) {
   return data;
 }
 
-export async function fetchUserDetails({ id, signal }: { id: string, signal?: AbortSignal }) {
+export async function fetchUserDetails({
+  id,
+  signal,
+}: {
+  id: string;
+  signal?: AbortSignal;
+}) {
   const url = `http://localhost:8080/user/${id}`;
 
   const response = await fetch(url, {
